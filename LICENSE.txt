@@ -1,4 +1,4 @@
-Copyright (c) 2013 Mike Admire
+Copyright (c) 2013 Michael Admire (mike@mikeadmire.com)
 
 MIT License
 
