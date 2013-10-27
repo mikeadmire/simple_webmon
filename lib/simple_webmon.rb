@@ -1,5 +1,9 @@
 require "simple_webmon/version"
 
 module SimpleWebmon
-  # Your code goes here...
+  class Monitor
+    def get(url)
+      'OK'
+    end
+  end
 end
