@@ -9,8 +9,11 @@ describe SimpleWebmon do
 			 body: "Hello World!")
 
     FakeWeb.register_uri(:get, "http://servererror.example.com/",
-			 :body => "Internal Server Error",
-			 :status => ["500", "Internal Server Error"])
+			 body: "Internal Server Error",
+			 status: ["500", "Internal Server Error"])
+
+    FakeWeb.register_uri(:get, "http://slow.example.com/",
+			 response: sleep(10))
   end
 
   it "returns 'OK' when given a URL for a properly responding site" do
@@ -23,4 +26,8 @@ describe SimpleWebmon do
     expect(monitor.get("http://servererror.example.com/")).to eq 'DOWN'
   end
 
+  it "returns 'DOWN' when given a URL that doesn't respond in time" do
+    monitor = SimpleWebmon::Monitor.new
+    expect(monitor.check("http://slow.example.com/", 1)).to eq 'ERROR: TIMEOUT'
+  end
 end
