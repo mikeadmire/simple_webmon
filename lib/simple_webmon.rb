@@ -16,13 +16,15 @@ module SimpleWebmon
     end
 
     def check(url, timeout_time=30)
+      status = ""
       begin
 	Timeout::timeout(timeout_time) do
-	  return get(url)
+	  status = get(url)
 	end
       rescue
-	return 'ERROR: TIMEOUT'
+	status = 'ERROR: TIMEOUT'
       end
+      status
     end
 
   end
