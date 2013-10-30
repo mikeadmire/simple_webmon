@@ -16,18 +16,30 @@ describe SimpleWebmon do
 			 response: sleep(10))
   end
 
-  it "returns 'OK' when given a URL for a properly responding site" do
-    monitor = SimpleWebmon::Monitor.new
-    expect(monitor.get_status("http://good.example.com/")).to eq 'OK'
+  let(:monitor) { SimpleWebmon::Monitor.new }
+
+  describe '.get_status' do
+    it "returns 'OK' when given a URL for a properly responding site" do
+      expect(monitor.get_status("http://good.example.com/")).to eq 'OK'
+    end
+
+    it "returns correct status message when given a URL that responds with an Internal Server Error" do
+      expect(monitor.get_status("http://servererror.example.com/")).to eq 'Internal Server Error'
+    end
   end
 
-  it "returns 'DOWN' when given a URL that responds with an Internal Server Error" do
-    monitor = SimpleWebmon::Monitor.new
-    expect(monitor.get_status("http://servererror.example.com/")).to eq 'Internal Server Error'
+  describe '.check' do
+    it "returns 'DOWN' when given a URL that doesn't respond in time" do
+      expect(monitor.check("http://slow.example.com/", 1)).to eq 'ERROR: Timeout'
+    end
+
+    it "returns 'OK' when given a URL that responds correctly" do
+      expect(monitor.check("http://good.example.com/")).to eq 'OK'
+    end
+
+    it "returns 'ERROR' and the correct status message when given a URL that fails" do
+      expect(monitor.check("http://servererror.example.com/")).to eq 'ERROR: Internal Server Error'
+    end
   end
 
-  it "returns 'DOWN' when given a URL that doesn't respond in time" do
-    monitor = SimpleWebmon::Monitor.new
-    expect(monitor.check("http://slow.example.com/", 1)).to eq 'ERROR: Timeout'
-  end
 end
