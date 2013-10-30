@@ -18,16 +18,16 @@ describe SimpleWebmon do
 
   it "returns 'OK' when given a URL for a properly responding site" do
     monitor = SimpleWebmon::Monitor.new
-    expect(monitor.get("http://good.example.com/")).to eq 'OK'
+    expect(monitor.get_status("http://good.example.com/")).to eq 'OK'
   end
 
   it "returns 'DOWN' when given a URL that responds with an Internal Server Error" do
     monitor = SimpleWebmon::Monitor.new
-    expect(monitor.get("http://servererror.example.com/")).to eq 'DOWN'
+    expect(monitor.get_status("http://servererror.example.com/")).to eq 'Internal Server Error'
   end
 
   it "returns 'DOWN' when given a URL that doesn't respond in time" do
     monitor = SimpleWebmon::Monitor.new
-    expect(monitor.check("http://slow.example.com/", 1)).to eq 'ERROR: TIMEOUT'
+    expect(monitor.check("http://slow.example.com/", 1)).to eq 'ERROR: Timeout'
   end
 end

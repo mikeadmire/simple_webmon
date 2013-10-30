@@ -6,25 +6,21 @@ require 'timeout'
 module SimpleWebmon
   class Monitor
 
-    def get(url)
+    def get_status(url)
       res = Net::HTTP.get_response(URI.parse(url))
-      if res.code == "200"
-	return 'OK'
-      else
-	return 'DOWN'
-      end
+      res.message
     end
 
     def check(url, timeout_time=30)
       status = ""
       begin
 	Timeout::timeout(timeout_time) do
-	  status = get(url)
+	  status = get_status(url)
 	end
       rescue
-	status = 'ERROR: TIMEOUT'
+	status = 'Timeout'
       end
-      status
+      status == 'OK' ? status : "ERROR: #{status}"
     end
 
   end
