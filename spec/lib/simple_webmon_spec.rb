@@ -12,6 +12,10 @@ describe SimpleWebmon do
 			 body: "Internal Server Error",
 			 status: ["500", "Internal Server Error"])
 
+    FakeWeb.register_uri(:get, "http://notfound.example.com/",
+			 body: "Page Not Found",
+			 status: ["404", "Not Found"])
+
     FakeWeb.register_uri(:get, "http://slow.example.com/",
 			 response: sleep(10))
   end
@@ -29,6 +33,7 @@ describe SimpleWebmon do
   end
 
   describe '.check' do
+
     it "returns 'DOWN' when given a URL that doesn't respond in time" do
       expect(monitor.check("http://slow.example.com/", 1)).to eq 'ERROR: Timeout'
     end
@@ -40,6 +45,11 @@ describe SimpleWebmon do
     it "returns 'ERROR' and the correct status message when given a URL that fails" do
       expect(monitor.check("http://servererror.example.com/")).to eq 'ERROR: Internal Server Error'
     end
+
+    it "returns 'ERROR' and the correct status message when given a URL that fails" do
+      expect(monitor.check("http://notfound.example.com/")).to eq 'ERROR: Not Found'
+    end
+
   end
 
 end
