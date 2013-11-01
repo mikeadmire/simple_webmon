@@ -34,7 +34,7 @@ describe SimpleWebmon do
 
   describe '.check' do
 
-    it "returns 'DOWN' when given a URL that doesn't respond in time" do
+    it "returns 'ERROR' and timeout message when given a URL that doesn't respond in time" do
       expect(monitor.check("http://slow.example.com/", 1)).to eq 'ERROR: Timeout'
     end
 
