@@ -8,9 +8,9 @@ Gem::Specification.new do |spec|
   spec.version       = SimpleWebmon::VERSION
   spec.authors       = ["Mike Admire"]
   spec.email         = ["mike@mikeadmire.com"]
-  spec.description   = %q{Easy way to setup basic website monitoring.}
-  spec.summary       = %q{simple_webmon is a Ruby gem that makes it easy to setup a basic website monitor.}
-  spec.homepage      = ""
+  spec.description   = %q{Simple website monitoring.}
+  spec.summary       = %q{SimpleWebmon is a Ruby gem that makes it easy to setup a basic website monitor.}
+  spec.homepage      = "https://github.com/mikeadmire/simple_webmon"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)

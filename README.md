@@ -1,8 +1,6 @@
-# (Incomplete and unpublished)
-
 # SimpleWebmon
 
-TODO: Write a gem description
+SimpleWebmon is a Ruby gem that makes it easy to setup a basic website monitor.
 
 ## Installation
 
@@ -20,7 +18,15 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+    require 'simple_webmon'
+
+    monitor = SimpleWebmon::Monitor.new
+    monitor.check("http://www.example.com")
+
+The default timeout is 30 seconds. An optional second parameter can be passed
+to override this. Value is in seconds.
+
+    monitor.check("http://www.example.com", 60)
 
 ## Contributing
 
