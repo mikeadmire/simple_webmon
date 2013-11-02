@@ -1,4 +1,4 @@
-#require "simple_webmon/version"
+require "simple_webmon/version"
 require 'net/http'
 require 'uri'
 require 'timeout'
