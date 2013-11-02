@@ -1,4 +1,4 @@
-require "simple_webmon/version"
+#require "simple_webmon/version"
 require 'net/http'
 require 'uri'
 require 'timeout'
@@ -21,6 +21,14 @@ module SimpleWebmon
 	status = 'Timeout'
       end
       status == 'OK' ? status : "ERROR: #{status}"
+    end
+
+    def check_all(server_list)
+      responses = {}
+      server_list.each do |server|
+	responses[server[0]] = check(server[0], server[1])
+      end
+      responses
     end
 
   end

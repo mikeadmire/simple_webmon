@@ -52,4 +52,35 @@ describe SimpleWebmon do
 
   end
 
+  describe '.check_all' do
+    let(:server_list) {
+      [["http://good.example.com"],
+       ["http://slow.example.com", 1],
+       ["http://servererror.example.com"],
+       ["http://notfound.example.com"]]
+    }
+
+    it "accepts an array of servers and returns a hash" do
+      expect(monitor.check_all(server_list)).to be_an(Hash)
+    end
+
+    it "returned array has hostname and check response" do
+      responses = monitor.check_all(server_list)
+      expect(responses[server_list[0][0]]).to eq 'OK'
+    end
+
+    it "passes the timeout parameter along to check" do
+      responses = monitor.check_all(server_list)
+      expect(responses[server_list[1][0]]).to eq 'ERROR: Timeout'
+    end
+
+    it "passes hash with correct status message for each element passed in" do
+      responses = monitor.check_all(server_list)
+      expect(responses[server_list[0][0]]).to eq 'OK'
+      expect(responses[server_list[1][0]]).to eq 'ERROR: Timeout'
+      expect(responses[server_list[2][0]]).to eq 'ERROR: Internal Server Error'
+      expect(responses[server_list[3][0]]).to eq 'ERROR: Not Found'
+    end
+  end
+
 end
