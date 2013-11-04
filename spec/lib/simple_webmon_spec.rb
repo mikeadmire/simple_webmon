@@ -83,4 +83,15 @@ describe SimpleWebmon do
     end
   end
 
+  describe 'Server' do
+    it "can be created" do
+      expect(SimpleWebmon::Server.new("http://good.example.com")).to be_a(SimpleWebmon::Server)
+    end
+
+    it "stores a server URL and timeout settings" do
+      server = SimpleWebmon::Server.new("http://good.example.com", 10)
+      expect(server.url).to eq("http://good.example.com")
+      expect(server.timeout).to eq(10)
+    end
+  end
 end

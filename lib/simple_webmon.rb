@@ -4,6 +4,15 @@ require 'uri'
 require 'timeout'
 
 module SimpleWebmon
+
+  class Server
+    attr_reader :url, :timeout
+    def initialize(url, timeout = 30)
+      @url = url
+      @timeout = timeout
+    end
+  end
+
   class Monitor
 
     def get_status(url)
