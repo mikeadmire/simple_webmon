@@ -5,8 +5,10 @@ require 'timeout'
 
 module SimpleWebmon
 
-  class Server
+  class Site
     attr_reader :url, :timeout
+    attr_accessor :response
+
     def initialize(url, timeout = 30)
       @url = url
       @timeout = timeout
@@ -32,12 +34,11 @@ module SimpleWebmon
       status == 'OK' ? status : "ERROR: #{status}"
     end
 
-    def check_all(server_list)
-      responses = {}
-      server_list.each do |server|
-	responses[server[0]] = check(server[0], server[1])
+    def check_sites(site_list)
+      site_list.each do |site|
+	site.response = check(site.url, site.timeout)
       end
-      responses
+      site_list
     end
 
   end
