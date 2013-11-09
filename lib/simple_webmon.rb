@@ -7,7 +7,7 @@ module SimpleWebmon
 
   class Site
     attr_reader :url, :timeout
-    attr_accessor :response
+    attr_accessor :status
 
     def initialize(url, timeout = 30)
       @url = url
@@ -36,7 +36,7 @@ module SimpleWebmon
 
     def check_sites(site_list)
       site_list.each do |site|
-	site.response = check(site.url, site.timeout)
+	site.status = check(site.url, site.timeout)
       end
       site_list
     end

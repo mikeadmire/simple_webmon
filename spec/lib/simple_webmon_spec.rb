@@ -68,20 +68,20 @@ describe SimpleWebmon do
 
       it "returned array has hostname and check response" do
 	response = monitor.check_sites(sites)
-	expect(response[0].response).to eq 'OK'
+	expect(response[0].status).to eq 'OK'
       end
 
       it "passes the timeout parameter along to check" do
 	response = monitor.check_sites(sites)
-	expect(response[1].response).to eq 'ERROR: Timeout'
+	expect(response[1].status).to eq 'ERROR: Timeout'
       end
 
       it "returns correct status messages for each element passed in" do
 	response = monitor.check_sites(sites)
-	expect(response[0].response).to eq 'OK'
-	expect(response[1].response).to eq 'ERROR: Timeout'
-	expect(response[2].response).to eq 'ERROR: Internal Server Error'
-	expect(response[3].response).to eq 'ERROR: Not Found'
+	expect(response[0].status).to eq 'OK'
+	expect(response[1].status).to eq 'ERROR: Timeout'
+	expect(response[2].status).to eq 'ERROR: Internal Server Error'
+	expect(response[3].status).to eq 'ERROR: Not Found'
       end
     end
   end
