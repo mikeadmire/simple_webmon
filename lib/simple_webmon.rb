@@ -7,41 +7,48 @@ module SimpleWebmon
 
   class Site
     attr_reader :url, :timeout
-    attr_accessor :status
+    attr_accessor :code, :message
 
     def initialize(url, timeout = 30)
       @url = url
       @timeout = timeout
     end
+
+    def status
+      [self.code, self.message]
+    end
   end
 
   class Monitor
 
-    def get_status(url)
+    def get_response(url)
       res = Net::HTTP.get_response(URI.parse(url))
       if res.code == "301"
 	res = Net::HTTP.get_response(URI.parse(res.header['location']))
       end
-      res.message
+      res
     end
 
-    def check(url, timeout_time=30)
-      status = ""
+    def check(site)
       begin
-	Timeout::timeout(timeout_time) do
-	  status = get_status(url)
+	Timeout::timeout(site.timeout) do
+	  response = get_response(site.url)
+	  site.code = response.code
+	  site.message = response.message
 	end
       rescue Timeout::Error
-	status = 'Timeout'
+	site.code = '998'
+	site.message = 'Request Timed Out'
       rescue Exception => e
-	status = e
+	site.code = '999'
+	site.message = e
       end
-      status == 'OK' ? status : "ERROR: #{status}"
+      site
     end
 
     def check_sites(site_list)
       site_list.each do |site|
-	site.status = check(site.url, site.timeout)
+	check(site)
       end
       site_list
     end

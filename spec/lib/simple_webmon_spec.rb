@@ -24,31 +24,31 @@ describe SimpleWebmon do
 
     let(:monitor) { SimpleWebmon::Monitor.new }
 
-    describe '.get_status' do
-      it "returns 'OK' when given a URL for a properly responding site" do
-	expect(monitor.get_status("http://good.example.com")).to eq 'OK'
+    describe '.get_response' do
+      it "returns valid response when given a URL for a properly responding site" do
+	expect(monitor.get_response("http://good.example.com").code).to eq '200'
       end
 
       it "returns correct status message when given a URL that responds with an Internal Server Error" do
-	expect(monitor.get_status("http://servererror.example.com")).to eq 'Internal Server Error'
+	expect(monitor.get_response("http://servererror.example.com").code).to eq '500'
       end
     end
 
     describe '.check' do
-      it "returns 'OK' when given a URL that responds correctly" do
-	expect(monitor.check("http://good.example.com")).to eq 'OK'
+      it "returns '200' when given a URL that responds correctly" do
+	expect(monitor.check(SimpleWebmon::Site.new("http://good.example.com")).status).to eq ['200', 'OK']
       end
 
-      it "returns 'ERROR' and the correct status message when given a URL that fails" do
-	expect(monitor.check("http://servererror.example.com")).to eq 'ERROR: Internal Server Error'
+      it "returns the correct status message when given a URL that fails" do
+	expect(monitor.check(SimpleWebmon::Site.new("http://servererror.example.com")).status).to eq ['500', 'Internal Server Error']
       end
 
-      it "returns 'ERROR' and the correct status message when given a URL that fails" do
-	expect(monitor.check("http://notfound.example.com")).to eq 'ERROR: Not Found'
+      it "returns and the correct status message when given a URL that fails" do
+	expect(monitor.check(SimpleWebmon::Site.new("http://notfound.example.com")).status).to eq ['404', 'Not Found']
       end
 
-      it "returns 'OK' when given a URL that redirects to a site that responds correctly" do
-	expect(monitor.check("https://redirect.example.com")).to eq 'OK'
+      it "returns '200' when given a URL that redirects to a site that responds correctly" do
+	expect(monitor.check(SimpleWebmon::Site.new("https://redirect.example.com")).status).to eq ['200', 'OK']
       end
 
     end
@@ -68,14 +68,14 @@ describe SimpleWebmon do
 
       it "returned array has hostname and check response" do
 	response = monitor.check_sites(sites)
-	expect(response[0].status).to eq 'OK'
+	expect(response[0].code).to eq '200'
       end
 
       it "returns correct status messages for each element passed in" do
 	response = monitor.check_sites(sites)
-	expect(response[0].status).to eq 'OK'
-	expect(response[1].status).to eq 'ERROR: Internal Server Error'
-	expect(response[2].status).to eq 'ERROR: Not Found'
+	expect(response[0].code).to eq '200'
+	expect(response[1].code).to eq '500'
+	expect(response[2].code).to eq '404'
       end
     end
   end
