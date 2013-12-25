@@ -19,6 +19,10 @@ describe SimpleWebmon do
 
       FakeWeb.register_uri(:get, "http://slow.example.com/",
 			   response: sleep(10))
+
+      FakeWeb.register_uri(:get, "https://redirect.example.com/",
+			   status: ["301", "Moved Permanently"],
+			   location: "http://good.example.com/")
     end
 
     let(:monitor) { SimpleWebmon::Monitor.new }
@@ -48,6 +52,10 @@ describe SimpleWebmon do
 
       it "returns 'ERROR' and the correct status message when given a URL that fails" do
 	expect(monitor.check("http://notfound.example.com/")).to eq 'ERROR: Not Found'
+      end
+
+      it "returns 'OK' when given a URL that redirects to a site that responds correctly" do
+	expect(monitor.check("https://redirect.example.com")).to eq 'OK'
       end
 
     end

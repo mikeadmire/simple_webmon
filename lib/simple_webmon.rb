@@ -19,6 +19,9 @@ module SimpleWebmon
 
     def get_status(url)
       res = Net::HTTP.get_response(URI.parse(url))
+      if res.code == "301"
+	res = Net::HTTP.get_response(URI.parse(res.header['location']))
+      end
       res.message
     end
 
