@@ -31,8 +31,10 @@ module SimpleWebmon
 	Timeout::timeout(timeout_time) do
 	  status = get_status(url)
 	end
-      rescue
+      rescue Timeout::Error
 	status = 'Timeout'
+      rescue Exception => e
+	status = e
       end
       status == 'OK' ? status : "ERROR: #{status}"
     end
